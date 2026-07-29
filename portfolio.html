@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sravya K — AI/ML Engineer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E14;
+    --panel:#12161F;
+    --panel-2:#171C27;
+    --line:#232936;
+    --text:#E7E9EE;
+    --muted:#8A93A6;
+    --cyan:#00D9C0;
+    --violet:#8B7FFF;
+    --amber:#FFB86B;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--cyan); color:#000;}
+  a{color:inherit;}
+
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 5vw;
+    background:rgba(11,14,20,0.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:15px; letter-spacing:0.5px;}
+  .logo span{color:var(--cyan);}
+  .navlinks{display:flex; gap:32px; font-family:'IBM Plex Mono', monospace; font-size:13px;}
+  .navlinks a{text-decoration:none; color:var(--muted); transition:color .2s;}
+  .navlinks a:hover{color:var(--cyan);}
+  @media (max-width:700px){ .navlinks{display:none;} }
+
+  /* HERO */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:0 5vw;
+  }
+  #canvas-container{
+    position:absolute; inset:0;
+    opacity:0.9;
+  }
+  .hero-content{
+    position:relative; z-index:2;
+    max-width:640px;
+    padding-top:60px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:var(--cyan);
+    letter-spacing:1.5px;
+    margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .dot{width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 12px var(--cyan); animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+  h1{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(38px, 6vw, 64px);
+    font-weight:700;
+    line-height:1.05;
+    letter-spacing:-1px;
+    margin-bottom:20px;
+  }
+  h1 .accent{color:var(--cyan);}
+  .hero-sub{
+    font-size:18px;
+    color:var(--muted);
+    line-height:1.6;
+    margin-bottom:36px;
+    max-width:520px;
+  }
+  .hero-sub b{color:var(--text); font-weight:600;}
+  .cta-row{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    padding:14px 24px;
+    border-radius:4px;
+    text-decoration:none;
+    font-weight:600;
+    transition:all .2s;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{background:var(--cyan); color:#001410;}
+  .btn-primary:hover{box-shadow:0 0 24px rgba(0,217,192,0.4); transform:translateY(-1px);}
+  .btn-ghost{border:1px solid var(--line); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--cyan); color:var(--cyan);}
+
+  .scroll-hint{
+    position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    z-index:2;
+  }
+  .scroll-line{width:1px; height:36px; background:linear-gradient(var(--muted), transparent); animation:scrolldown 2s infinite;}
+  @keyframes scrolldown{0%{opacity:0;} 50%{opacity:1;} 100%{opacity:0;}}
+
+  /* SECTION GENERIC */
+  section{padding:120px 5vw; position:relative;}
+  .section-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--cyan);
+    letter-spacing:2px;
+    margin-bottom:14px;
+  }
+  .section-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(26px,4vw,38px);
+    font-weight:700;
+    margin-bottom:50px;
+    max-width:700px;
+  }
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+
+  /* SKILLS */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .skill-card{
+    background:var(--panel);
+    padding:28px 24px;
+    transition:background .2s;
+  }
+  .skill-card:hover{background:var(--panel-2);}
+  .skill-card .num{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted); margin-bottom:14px;}
+  .skill-card h3{font-family:'IBM Plex Mono', monospace; font-size:16px; margin-bottom:10px; color:var(--cyan);}
+  .skill-card p{font-size:14px; color:var(--muted); line-height:1.6;}
+
+  /* PROJECTS */
+  .project{
+    display:grid;
+    grid-template-columns:1fr 1.3fr;
+    gap:48px;
+    padding:44px 0;
+    border-top:1px solid var(--line);
+    align-items:start;
+  }
+  .project:last-child{border-bottom:1px solid var(--line);}
+  @media (max-width:800px){ .project{grid-template-columns:1fr;} }
+  .project-meta{font-family:'IBM Plex Mono', monospace;}
+  .project-tag{
+    display:inline-block; font-size:11px; color:var(--violet);
+    border:1px solid var(--violet); border-radius:20px; padding:4px 12px;
+    margin-bottom:16px;
+  }
+  .project h3{font-size:22px; margin-bottom:10px; font-family:'IBM Plex Mono', monospace;}
+  .project a.repo-link{font-size:13px; color:var(--cyan); text-decoration:none;}
+  .project a.repo-link:hover{text-decoration:underline;}
+  .project-body p{color:var(--muted); font-size:15px; line-height:1.7; margin-bottom:14px;}
+  .project-body ul{list-style:none; padding:0;}
+  .project-body li{
+    font-size:14px; color:var(--text); line-height:1.8; padding-left:18px; position:relative;
+  }
+  .project-body li::before{
+    content:"→"; position:absolute; left:0; color:var(--cyan);
+  }
+  .stack-pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+  .pill{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted); border:1px solid var(--line); padding:5px 10px; border-radius:4px;}
+
+  /* CONTACT */
+  .contact-section{text-align:center;}
+  .contact-section .section-title{margin:0 auto 24px; }
+  .contact-section p{color:var(--muted); max-width:500px; margin:0 auto 40px; font-size:16px;}
+
+  footer{
+    padding:32px 5vw;
+    border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
+    flex-wrap:wrap; gap:12px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .dot, .scroll-line{animation:none;}
+    .reveal{transition:none; opacity:1; transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">sravya<span>.k</span></div>
+  <div class="navlinks">
+    <a href="#skills">skills</a>
+    <a href="#projects">projects</a>
+    <a href="#contact">contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div id="canvas-container"></div>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="dot"></span> STATUS: OPEN TO OPPORTUNITIES</div>
+    <h1>AI/ML Engineer<br>building <span class="accent">production</span><br>systems.</h1>
+    <p class="hero-sub">
+      I take models past <b>train.py</b> — into <b>Docker, Kubernetes, CI/CD, and monitoring</b>. Data pipelines, GenAI/RAG explainability layers, and MLOps infrastructure that actually runs.
+    </p>
+    <div class="cta-row">
+      <a href="#projects" class="btn btn-primary">View Projects ↓</a>
+      <a href="https://www.linkedin.com/in/sravya-k85/" target="_blank" class="btn btn-ghost">LinkedIn</a>
+      <a href="https://github.com/Sravya-k0330" target="_blank" class="btn btn-ghost">GitHub</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-label reveal">// CAPABILITIES</div>
+  <h2 class="section-title reveal">Five layers of the same discipline: making ML work in production.</h2>
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="num">01</div>
+      <h3>Data Engineering</h3>
+      <p>Spark + Kafka + Airflow pipelines over 38M+ records. Medallion architecture into Snowflake via dbt.</p>
+    </div>
+    <div class="skill-card">
+      <div class="num">02</div>
+      <h3>Data Science</h3>
+      <p>Honest evaluation on imbalanced data — PR-AUC over accuracy, documented in real model cards.</p>
+    </div>
+    <div class="skill-card">
+      <div class="num">03</div>
+      <h3>Machine Learning</h3>
+      <p>scikit-learn pipelines, from-scratch SMOTE, threshold tuning, model selection by metric — not vibes.</p>
+    </div>
+    <div class="skill-card">
+      <div class="num">04</div>
+      <h3>GenAI / RAG</h3>
+      <p>LiteLLM multi-provider gateway + TF-IDF retrieval for grounded, plain-language explanations.</p>
+    </div>
+    <div class="skill-card">
+      <div class="num">05</div>
+      <h3>MLOps</h3>
+      <p>Docker → Kubernetes → CI/CD with auto-rollback. Prometheus/Grafana drift and latency monitoring.</p>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-label reveal">// SELECTED WORK</div>
+  <h2 class="section-title reveal">Three systems, each built past the notebook.</h2>
+
+  <div class="project reveal">
+    <div class="project-meta">
+      <span class="project-tag">GenAI · RAG · MLOps</span>
+      <h3>Travel Insurance Claim Intelligence</h3>
+      <a class="repo-link" href="https://github.com/Sravya-k0330/Travel_Insurance_Prediction-AI-ML" target="_blank">github.com/Sravya-k0330/Travel_Insurance_Prediction-AI-ML ↗</a>
+    </div>
+    <div class="project-body">
+      <p>Predicts travel-insurance claim risk and explains each prediction in plain language through an LLM + RAG layer — with full production scaffolding.</p>
+      <ul>
+        <li>3 models compared on a 1.68%-positive-rate imbalanced dataset (63k rows), evaluated on PR-AUC with a full model card</li>
+        <li>From-scratch SMOTE and a from-scratch Population Stability Index drift detector</li>
+        <li>/v1/explain: TF-IDF RAG retrieval → LiteLLM gateway (OpenAI/Anthropic/Bedrock/Ollama) → deterministic fallback on error</li>
+        <li>CI (lint/type-check/test/Docker smoke test), CD to GHCR on tags, Kubernetes + Prometheus/Grafana</li>
+      </ul>
+      <div class="stack-pills">
+        <span class="pill">FastAPI</span><span class="pill">scikit-learn</span><span class="pill">LiteLLM</span><span class="pill">Docker</span><span class="pill">Kubernetes</span><span class="pill">GitHub Actions</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project reveal">
+    <div class="project-meta">
+      <span class="project-tag">MLOps · Serving</span>
+      <h3>Telco Churn MLOps Pipeline</h3>
+      <a class="repo-link" href="https://github.com/Sravya-k0330/AI_MLOps-LLM-MCP-RAG" target="_blank">github.com/Sravya-k0330/AI_MLOps-LLM-MCP-RAG ↗</a>
+    </div>
+    <div class="project-body">
+      <p>The full path from train.py to a live, monitored production endpoint.</p>
+      <ul>
+        <li>FastAPI serving with single + batch prediction, tracked via MLflow model registry</li>
+        <li>Kubernetes on EKS: autoscaling, PodDisruptionBudget, canary rollouts (K8s + Seldon)</li>
+        <li>CI/CD: test → build → ECR → deploy → automated smoke test → automatic rollback</li>
+        <li>Prometheus metrics for latency, volume, and prediction drift</li>
+      </ul>
+      <div class="stack-pills">
+        <span class="pill">MLflow</span><span class="pill">EKS</span><span class="pill">Seldon Core</span><span class="pill">Prometheus</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project reveal">
+    <div class="project-meta">
+      <span class="project-tag">Data Engineering</span>
+      <h3>NYC Taxi Data Platform</h3>
+      <a class="repo-link" href="https://github.com/Sravya-k0330/nyc-taxi-data-engineering-platform" target="_blank">github.com/Sravya-k0330/nyc-taxi-data-engineering-platform ↗</a>
+    </div>
+    <div class="project-body">
+      <p>Production-grade batch + streaming data platform over ~38M real NYC TLC trip records.</p>
+      <ul>
+        <li>Spark batch + Kafka streaming ingestion, orchestrated with Airflow</li>
+        <li>Bronze → Silver → Gold medallion architecture, modeled with dbt into Snowflake</li>
+        <li>Great Expectations validation + 14/14 passing dbt tests</li>
+        <li>Full year of data processed end-to-end in ~22 minutes</li>
+      </ul>
+      <div class="stack-pills">
+        <span class="pill">Spark</span><span class="pill">Kafka</span><span class="pill">Airflow</span><span class="pill">dbt</span><span class="pill">Snowflake</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact-section">
+  <div class="section-label reveal">// GET IN TOUCH</div>
+  <h2 class="section-title reveal">Let's talk about your team's next model in production.</h2>
+  <p class="reveal">Open to AI/ML Engineer, MLOps, and Data Engineering roles.</p>
+  <div class="cta-row reveal" style="justify-content:center;">
+    <a href="https://www.linkedin.com/in/sravya-k85/" target="_blank" class="btn btn-primary">Connect on LinkedIn</a>
+    <a href="https://github.com/Sravya-k0330" target="_blank" class="btn btn-ghost">View GitHub</a>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 Sravya K.</div>
+  <div class="mono">BUILT WITH THREE.JS</div>
+</footer>
+
+<script>
+// ---- 3D PIPELINE VISUALIZATION ----
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+container.appendChild(renderer.domElement);
+
+const group = new THREE.Group();
+scene.add(group);
+
+// Pipeline stages: Data -> Model -> Serve -> Monitor, arranged in 3D space
+const stageColors = [0x8B7FFF, 0x00D9C0, 0xFFB86B, 0x00D9C0];
+const stagePositions = [
+  new THREE.Vector3(-6, 1.5, -2),
+  new THREE.Vector3(-2, -1.2, 1),
+  new THREE.Vector3(2.2, 1.0, -1.5),
+  new THREE.Vector3(6, -1.0, 2)
+];
+
+const nodes = [];
+stagePositions.forEach((pos, i) => {
+  const geo = new THREE.IcosahedronGeometry(0.42, 0);
+  const mat = new THREE.MeshBasicMaterial({ color: stageColors[i % stageColors.length], wireframe:true, transparent:true, opacity:0.85 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.copy(pos);
+  group.add(mesh);
+  nodes.push(mesh);
+
+  // inner solid core (small)
+  const coreGeo = new THREE.SphereGeometry(0.14, 12, 12);
+  const coreMat = new THREE.MeshBasicMaterial({ color: stageColors[i % stageColors.length] });
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  core.position.copy(pos);
+  group.add(core);
+});
+
+// connecting lines between consecutive stages
+for(let i=0; i<stagePositions.length-1; i++){
+  const points = [stagePositions[i], stagePositions[i+1]];
+  const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+  const lineMat = new THREE.LineBasicMaterial({ color:0x2A3140, transparent:true, opacity:0.7 });
+  const line = new THREE.Line(lineGeo, lineMat);
+  group.add(line);
+}
+
+// scattered ambient particles (data points)
+const particleCount = 140;
+const particleGeo = new THREE.BufferGeometry();
+const positions = new Float32Array(particleCount * 3);
+for(let i=0;i<particleCount;i++){
+  positions[i*3] = (Math.random()-0.5) * 20;
+  positions[i*3+1] = (Math.random()-0.5) * 12;
+  positions[i*3+2] = (Math.random()-0.5) * 10 - 2;
+}
+particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const particleMat = new THREE.PointsMaterial({ color:0x3A4356, size:0.035, transparent:true, opacity:0.6 });
+const particles = new THREE.Points(particleGeo, particleMat);
+scene.add(particles);
+
+camera.position.set(0, 0, 9);
+
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5);
+  mouseY = (e.clientY / window.innerHeight - 0.5);
+});
+
+const clock = new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+
+  group.rotation.y = t * 0.08 + mouseX * 0.4;
+  group.rotation.x = Math.sin(t*0.15) * 0.08 + mouseY * 0.2;
+
+  nodes.forEach((n, i) => {
+    n.rotation.x += 0.004 + i*0.0008;
+    n.rotation.y += 0.006;
+  });
+
+  particles.rotation.y = t * 0.015;
+
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ---- SCROLL REVEAL ----
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+revealEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
