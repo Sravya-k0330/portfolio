@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sravya K — AI/ML Engineer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%230B0E14'/%3E%3Ccircle cx='50' cy='50' r='46' fill='none' stroke='%2300D9C0' stroke-width='4'/%3E%3Ctext x='50' y='63' font-family='monospace' font-size='42' font-weight='700' fill='%2300D9C0' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -271,7 +272,27 @@
 
 <section id="projects">
   <div class="section-label reveal">// SELECTED WORK</div>
-  <h2 class="section-title reveal">Three systems, each built past the notebook.</h2>
+  <h2 class="section-title reveal">Four systems, each built past the notebook.</h2>
+
+  <div class="project reveal">
+    <div class="project-meta">
+      <span class="project-tag">Full Stack · ETL → GenAI → GitOps</span>
+      <h3>AI/ML Data Platform — Churn + GenAI Support Assistant</h3>
+      <a class="repo-link" href="https://github.com/Sravya-k0330/ai-ml-data-platform" target="_blank">github.com/Sravya-k0330/ai-ml-data-platform ↗</a>
+    </div>
+    <div class="project-body">
+      <p>One end-to-end system spanning every layer: ETL → ML → MLOps → GenAI/RAG → IaC → Kubernetes → GitOps CI/CD → Observability. For a health-insurance-style use case: predicts member churn risk and powers a support-agent AI assistant that answers policy questions via hybrid RAG.</p>
+      <ul>
+        <li>XGBoost churn model with SHAP explainability, tracked via MLflow (experiment tracking + model registry)</li>
+        <li>Hybrid RAG: BM25 keyword search + FAISS vector search over a policy knowledge base, served via an MCP server as governed tools</li>
+        <li>Terraform (AWS S3/ECR/EKS) → Kubernetes (Deployment/Service/HPA+KEDA) → ArgoCD GitOps synced from GitHub Actions CI/CD</li>
+        <li>Prometheus + Grafana observability on the FastAPI serving layer (/predict/churn, /rag/query, /metrics)</li>
+      </ul>
+      <div class="stack-pills">
+        <span class="pill">XGBoost</span><span class="pill">SHAP</span><span class="pill">FAISS</span><span class="pill">MCP</span><span class="pill">Terraform</span><span class="pill">ArgoCD</span><span class="pill">KEDA</span>
+      </div>
+    </div>
+  </div>
 
   <div class="project reveal">
     <div class="project-meta">
