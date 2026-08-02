@@ -272,7 +272,7 @@
 
 <section id="projects">
   <div class="section-label reveal">// SELECTED WORK</div>
-  <h2 class="section-title reveal">Four systems, each built past the notebook.</h2>
+  <h2 class="section-title reveal">Six systems, each built past the notebook.</h2>
 
   <div class="project reveal">
     <div class="project-meta">
@@ -350,6 +350,46 @@
       </ul>
       <div class="stack-pills">
         <span class="pill">Spark</span><span class="pill">Kafka</span><span class="pill">Airflow</span><span class="pill">dbt</span><span class="pill">Snowflake</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project reveal">
+    <div class="project-meta">
+      <span class="project-tag">Data Engineering · Web Scraping</span>
+      <h3>NBA Player Stats ETL Pipeline</h3>
+      <a class="repo-link" href="https://github.com/Sravya-k0330/nba-player-stats-etl" target="_blank">github.com/Sravya-k0330/nba-player-stats-etl ↗</a>
+    </div>
+    <div class="project-body">
+      <p>Scrapes historical NBA per-game player statistics, cleans and enriches them, and loads the result to CSV or SQL Server.</p>
+      <ul>
+        <li>Selenium-based scraper pulls per-game stats for any NBA season, 1960 to present</li>
+        <li>pandas/NumPy transform layer: age-group bucketing, assist-to-turnover ratio, custom efficiency score</li>
+        <li>Loads to CSV or MSSQL, with a pytest suite covering the transform logic</li>
+        <li>YAML-driven configuration and rotating file + console logging</li>
+      </ul>
+      <div class="stack-pills">
+        <span class="pill">Selenium</span><span class="pill">pandas</span><span class="pill">pytest</span><span class="pill">SQL Server</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project reveal">
+    <div class="project-meta">
+      <span class="project-tag">Data Engineering · Streaming</span>
+      <h3>Real-Time & Batch Data Pipeline with Kafka</h3>
+      <a class="repo-link" href="https://github.com/Sravya-k0330/realtime-batch-kafka-pipeline" target="_blank">github.com/Sravya-k0330/realtime-batch-kafka-pipeline ↗</a>
+    </div>
+    <div class="project-body">
+      <p>A containerized pipeline combining real-time streaming and scheduled batch processing on the same dataset.</p>
+      <ul>
+        <li>Kafka producer/consumer stream synthetic stock-price and sales-trend data into PostgreSQL</li>
+        <li>Batch ETL job computes rolling averages (10-minute stock price, 20-minute sales trend)</li>
+        <li>Every service — Kafka, Zookeeper, Postgres, producer, consumer, ETL — runs in its own container via Docker Compose</li>
+        <li>Credentials and broker addresses driven entirely by environment variables, not hardcoded</li>
+      </ul>
+      <div class="stack-pills">
+        <span class="pill">Kafka</span><span class="pill">PostgreSQL</span><span class="pill">Docker Compose</span>
       </div>
     </div>
   </div>
